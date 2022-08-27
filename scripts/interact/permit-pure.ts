@@ -67,57 +67,16 @@ async function main() {
   const addressList = await addresses.getAddressList(hre.network.name);
   const pmt = PermitToken__factory.connect(addressList["PMT"], signer1);
 
-  const TEST_AMOUNT = parseEther("1");
-  //   const nonce = 0;
-  //   const deadline = time.now() + time.duration.hours(1);
-
-  //   const digest = await getApprovalDigest(
-  //     pmt,
-  //     { owner: signer1.address, spender: signer2.address, value: TEST_AMOUNT },
-  //     nonce,
-  //     deadline
-  //   );
-
-  const nonce = 1;
-  const deadline = 1671624828;
-
-  const digest = await getApprovalDigest(
-    pmt,
-    { owner: signer1.address, spender: signer2.address, value: TEST_AMOUNT },
-    nonce,
-    deadline
-  );
-
-  console.log({ digest });
-
-  console.log(
-    pmt.address,
-    { owner: signer1.address, spender: signer2.address, value: TEST_AMOUNT },
-    nonce,
-    deadline
-  );
-
-  const privateKey = "YOUR-PRIVATE-KEY";
-
-  const sign = ecsign(
-    Buffer.from(digest.slice(2), "hex"),
-    Buffer.from(privateKey.slice(2), "hex")
-  );
-
-  const { v, r, s } = sign;
-
-  console.log({ v, r: hexlify(r), s: hexlify(s) });
-
   const tx = await pmt
     .connect(signer2)
     .permit(
-      signer1.address,
-      signer2.address,
-      TEST_AMOUNT,
-      deadline,
-      v,
-      hexlify(r),
-      hexlify(s)
+      "0x232cc14bf0c27fc01bddd84ac2d1a00d31349261",
+      "0xB83aae754c8D3848Fe0675A3E172C7005B09B11f",
+      "1000000000000000000",
+      1671624828,
+      28,
+      "0xb7d909babf33caacd4ea403994686eb02b514217119e409d17652c3009180731",
+      "0x0b471868d2e75c09a82879dcdeeee7982f70d6ecba7d0d6946a7cc225af18f45"
     );
 
   console.log("Permit success: ", tx.hash);
